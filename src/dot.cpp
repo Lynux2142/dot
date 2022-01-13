@@ -1,12 +1,4 @@
-#include <SDL2/SDL.h>
-#include <iostream>
-
-#define DOT_SIZE 10
-
-typedef struct	s_coord {
-	int			x;
-	int			y;
-}				t_coord;
+#include <dot.hpp>
 
 void			SDL_ExitWithError(const char *error) {
 	SDL_Log("%s: %s\n", error, SDL_GetError());
@@ -23,9 +15,19 @@ void			initialisation(SDL_Window **window, SDL_Renderer **renderer) {
 	*renderer = SDL_CreateRenderer(*window, -1, 0);
 	if (*renderer == NULL)
 		SDL_ExitWithError("Error Renderer creation");
-	if (*renderer == NULL) {
-		std::cout << "bonjour" << std::endl;
-	}
+}
+
+void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
+	if (event.key.keysym.sym == SDLK_ESCAPE)
+		*running = false;
+	if (event.key.keysym.sym == SDLK_UP)
+		dot->up();
+	if (event.key.keysym.sym == SDLK_DOWN)
+		dot->down();
+	if (event.key.keysym.sym == SDLK_LEFT)
+		dot->left();
+	if (event.key.keysym.sym == SDLK_RIGHT)
+		dot->right();
 }
 
 int				main(int ac, char **av) {
@@ -33,37 +35,22 @@ int				main(int ac, char **av) {
 	SDL_Renderer	*renderer = NULL;
 	SDL_Event		event;
 	bool			running = true;
-	t_coord			dotPos;
+	Dot				dot(DOT_POS_X, DOT_POS_Y, DOT_SIZE, DOT_THICKNESS);
 
 	initialisation(&window, &renderer);
-
-	dotPos.x = 100;
-	dotPos.y = 100;
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
 				running = false;
 			if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					running = false;
-				if (event.key.keysym.sym == SDLK_UP)
-					dotPos.y -= 10;
-				if (event.key.keysym.sym == SDLK_DOWN)
-					dotPos.y += 10;
-				if (event.key.keysym.sym == SDLK_LEFT)
-					dotPos.x -= 10;
-				if (event.key.keysym.sym == SDLK_RIGHT)
-					dotPos.x += 10;
+				keyboardEvent(event, &running, &dot);
 			}
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xff);
 		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 200, 0, 0, 0xff);
-		SDL_RenderDrawLine(renderer, dotPos.x - DOT_SIZE, dotPos.y, dotPos.x + DOT_SIZE, dotPos.y);
-		SDL_RenderDrawLine(renderer, dotPos.x, dotPos.y - DOT_SIZE, dotPos.x, dotPos.y + DOT_SIZE);
+		dot.drawDot(renderer);
 		SDL_RenderPresent(renderer);
 	}
-
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
