@@ -28,6 +28,14 @@ void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
 		dot->left();
 	if (event.key.keysym.sym == SDLK_RIGHT)
 		dot->right();
+	if (event.key.keysym.sym == SDLK_MINUS)
+		dot->resize(-DOT_RESIZE_SPEED);
+	if (event.key.keysym.sym == SDLK_EQUALS)
+		dot->resize(DOT_RESIZE_SPEED);
+	if (event.key.keysym.sym == SDLK_LEFTBRACKET)
+		dot->rethickness(-DOT_RETHICKNESS_SPEED);
+	if (event.key.keysym.sym == SDLK_RIGHTBRACKET)
+		dot->rethickness(DOT_RETHICKNESS_SPEED);
 }
 
 int				main(int ac, char **av) {
