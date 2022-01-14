@@ -18,24 +18,35 @@ void			initialisation(SDL_Window **window, SDL_Renderer **renderer) {
 }
 
 void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
-	if (event.key.keysym.sym == SDLK_ESCAPE)
-		*running = false;
-	if (event.key.keysym.sym == SDLK_UP)
-		dot->up();
-	if (event.key.keysym.sym == SDLK_DOWN)
-		dot->down();
-	if (event.key.keysym.sym == SDLK_LEFT)
-		dot->left();
-	if (event.key.keysym.sym == SDLK_RIGHT)
-		dot->right();
-	if (event.key.keysym.sym == SDLK_MINUS)
-		dot->resize(-DOT_RESIZE_SPEED);
-	if (event.key.keysym.sym == SDLK_EQUALS)
-		dot->resize(DOT_RESIZE_SPEED);
-	if (event.key.keysym.sym == SDLK_LEFTBRACKET)
-		dot->rethickness(-DOT_RETHICKNESS_SPEED);
-	if (event.key.keysym.sym == SDLK_RIGHTBRACKET)
-		dot->rethickness(DOT_RETHICKNESS_SPEED);
+	switch (event.key.keysym.sym) {
+		case SDLK_ESCAPE:
+			*running = false;
+			break;
+		case SDLK_UP:
+			dot->up();
+			break;
+		case SDLK_DOWN:
+			dot->down();
+			break;
+		case SDLK_LEFT:
+			dot->left();
+			break;
+		case SDLK_RIGHT:
+			dot->right();
+			break;
+		case SDLK_MINUS:
+			dot->resize(-DOT_RESIZE_SPEED);
+			break;
+		case SDLK_EQUALS:
+			dot->resize(DOT_RESIZE_SPEED);
+			break;
+		case SDLK_LEFTBRACKET:
+			dot->rethickness(-DOT_RETHICKNESS_SPEED);
+			break;
+		case SDLK_RIGHTBRACKET:
+			dot->rethickness(DOT_RETHICKNESS_SPEED);
+			break;
+	}
 }
 
 int				main(int ac, char **av) {
