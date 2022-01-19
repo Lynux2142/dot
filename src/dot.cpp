@@ -1,20 +1,22 @@
 #include <dot.hpp>
 
-void			SDL_ExitWithError(const char *error) {
-	SDL_Log("%s: %s\n", error, SDL_GetError());
+void			SDL_ExitWithError(const char *message, const char *error) {
+	SDL_Log("%s: %s\n", message, error);
 	exit(1);
 }
 
-void			initialisation(SDL_Window **window, SDL_Renderer **renderer) {
-	if (SDL_Init(SDL_INIT_VIDEO < 0))
-		SDL_ExitWithError("Error Initialisation SDL");
-	*window = SDL_CreateWindow("Dot", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_FULLSCREEN);
+void			initialisation(SDL_Window **window, SDL_Renderer **renderer, SDL_Surface **surface, SDL_Texture **texture) {
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+		SDL_ExitWithError("Error Initialisation SDL", SDL_GetError());
+	if ((*window = SDL_CreateWindow("Dot", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_FULLSCREEN)) == NULL)
+		SDL_ExitWithError("Error Window creation", SDL_GetError());
 	SDL_SetWindowFullscreen(*window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	if (*window == NULL)
-		SDL_ExitWithError("Error Window creation");
-	*renderer = SDL_CreateRenderer(*window, -1, 0);
-	if (*renderer == NULL)
-		SDL_ExitWithError("Error Renderer creation");
+	if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL)
+		SDL_ExitWithError("Error Renderer creation", SDL_GetError());
+	if ((*surface = IMG_Load(DOT_PATH)) == NULL)
+		SDL_ExitWithError("Error Image load", IMG_GetError());
+	if ((*texture = SDL_CreateTextureFromSurface(*renderer, *surface)) == NULL)
+		SDL_ExitWithError("Error Texture creation", SDL_GetError());
 }
 
 void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
@@ -40,23 +42,22 @@ void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
 		case SDLK_EQUALS:
 			dot->resize(DOT_RESIZE_SPEED);
 			break;
-		case SDLK_LEFTBRACKET:
-			dot->rethickness(-DOT_RETHICKNESS_SPEED);
-			break;
-		case SDLK_RIGHTBRACKET:
-			dot->rethickness(DOT_RETHICKNESS_SPEED);
-			break;
 	}
 }
 
 int				main(int ac, char **av) {
 	SDL_Window		*window = NULL;
 	SDL_Renderer	*renderer = NULL;
+	SDL_Surface		*surface = NULL;
+	SDL_Texture		*texture = NULL;
 	SDL_Event		event;
+	SDL_DisplayMode	DM;
 	bool			running = true;
-	Dot				dot(DOT_POS_X, DOT_POS_Y, DOT_SIZE, DOT_THICKNESS);
+	Dot				dot;
 
-	initialisation(&window, &renderer);
+	initialisation(&window, &renderer, &surface, &texture);
+	SDL_GetCurrentDisplayMode(0, &DM);
+	dot = Dot(DM.w / 2, DM.h / 2, DOT_SIZE);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
@@ -67,9 +68,11 @@ int				main(int ac, char **av) {
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xff);
 		SDL_RenderClear(renderer);
-		dot.drawDot(renderer);
+		SDL_RenderCopy(renderer, texture, NULL, &dot.pos);
 		SDL_RenderPresent(renderer);
 	}
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
