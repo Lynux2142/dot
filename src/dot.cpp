@@ -5,18 +5,19 @@ void			SDL_ExitWithError(const char *message, const char *error) {
 	exit(1);
 }
 
-void			initialisation(SDL_Window **window, SDL_Renderer **renderer, SDL_Surface **surface, SDL_Texture **texture) {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-		SDL_ExitWithError("Error Initialisation SDL", SDL_GetError());
-	if ((*window = SDL_CreateWindow("Dot", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_FULLSCREEN)) == NULL)
+void			init(SDL_Window **window, SDL_Renderer **renderer, SDL_Surface **surface, SDL_Texture **texture, Dot *dot) {
+	SDL_DisplayMode	DM;
+
+	SDL_GetCurrentDisplayMode(0, &DM);
+	if ((*window = SDL_CreateWindow("Dot", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DM.w, DM.h, SDL_WINDOW_FULLSCREEN)) == NULL)
 		SDL_ExitWithError("Error Window creation", SDL_GetError());
-	SDL_SetWindowFullscreen(*window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL)
 		SDL_ExitWithError("Error Renderer creation", SDL_GetError());
 	if ((*surface = IMG_Load(DOT_PATH)) == NULL)
 		SDL_ExitWithError("Error Image load", IMG_GetError());
 	if ((*texture = SDL_CreateTextureFromSurface(*renderer, *surface)) == NULL)
 		SDL_ExitWithError("Error Texture creation", SDL_GetError());
+	*dot = Dot(DM.w / 2, DM.h / 2, DOT_SIZE);
 }
 
 void			keyboardEvent(SDL_Event event, bool *running, Dot *dot) {
@@ -51,13 +52,12 @@ int				main(int ac, char **av) {
 	SDL_Surface		*surface = NULL;
 	SDL_Texture		*texture = NULL;
 	SDL_Event		event;
-	SDL_DisplayMode	DM;
 	bool			running = true;
 	Dot				dot;
 
-	initialisation(&window, &renderer, &surface, &texture);
-	SDL_GetCurrentDisplayMode(0, &DM);
-	dot = Dot(DM.w / 2, DM.h / 2, DOT_SIZE);
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+		SDL_ExitWithError("Error Initialisation SDL", SDL_GetError());
+	init(&window, &renderer, &surface, &texture, &dot);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
