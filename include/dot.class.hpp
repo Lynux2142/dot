@@ -4,6 +4,9 @@
 # include <dot.hpp>
 
 class				Dot {
+	private:
+		SDL_Rect	_init_pos;
+		int			_init_size;
 	public:
 		SDL_Rect	pos;
 		int			size;
@@ -16,6 +19,7 @@ class				Dot {
 		void		left(void);
 		void		right(void);
 		void		resize(int size);
+		void		reset(void);
 };
 
 #endif
