@@ -2,6 +2,8 @@ NAME = dot
 
 SRC = dot.cpp
 SRC += dot.class.cpp
+SRC += display.class.cpp
+SRC += ft_ExitWithError.cpp
 
 SRCS = ${addprefix ./src/, ${SRC}}
 
