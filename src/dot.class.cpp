@@ -1,18 +1,12 @@
 #include <dot.hpp>
 
 Dot::Dot(void) {
-	this->pos.x = 0;
-	this->pos.y = 0;
-	this->pos.w = 0;
-	this->pos.h = 0;
+	this->pos = {0, 0, 0, 0};
 	this->size = 0;
 }
 
 Dot::Dot(int x, int y, int size) {
-	this->pos.x = x;
-	this->pos.y = y;
-	this->pos.w = size;
-	this->pos.h = size;
+	this->pos = {x, y, size, size};
 	this->size = size;
 }
 
