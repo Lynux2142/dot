@@ -6,19 +6,19 @@
 class				Dot {
 	private:
 		SDL_Rect	_init_pos;
-		int			_init_size;
+		double		_ratio;
 	public:
 		SDL_Rect	pos;
-		int			size;
 
 		Dot(void);
-		Dot(int x, int y, int size);
+		Dot(int x, int y, int w, int h);
 
 		void		up(void);
 		void		down(void);
 		void		left(void);
 		void		right(void);
-		void		resize(int size);
+		void		upscale(void);
+		void		downscale(void);
 		void		reset(void);
 };
 

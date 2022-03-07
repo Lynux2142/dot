@@ -1,22 +1,28 @@
 #include <dot.hpp>
 
-void			keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot) {
-		if (keys[SDLK_ESCAPE])
-			*running = false;
-		if (keys[SDLK_UP])
-			dot->up();
-		if (keys[SDLK_DOWN])
-			dot->down();
-		if (keys[SDLK_LEFT])
-			dot->left();
-		if (keys[SDLK_RIGHT])
-			dot->right();
-		if (keys[SDLK_MINUS])
-			dot->resize(-DOT_RESIZE_SPEED);
-		if (keys[SDLK_EQUALS])
-			dot->resize(DOT_RESIZE_SPEED);
-		if (keys[SDLK_SPACE])
-			dot->reset();
+void			keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
+	if (keys[QUIT])
+		*running = false;
+	if (keys[MOVE_UP])
+		dot->up();
+	if (keys[MOVE_DOWN])
+		dot->down();
+	if (keys[MOVE_LEFT])
+		dot->left();
+	if (keys[MOVE_RIGHT])
+		dot->right();
+	if (keys[DOWN_SCALE])
+		dot->downscale();
+	if (keys[UP_SCALE])
+		dot->upscale();
+	if (keys[RESET])
+		dot->reset();
+	if (keys[NEXT_IMAGE])
+		display->next_image();
+	if (keys[PREV_IMAGE])
+		display->prev_image();
+	if (keys[SWITCH_IMAGE_TYPE])
+		display->switch_image_type();
 }
 
 int				main(int ac, char **av) {
@@ -26,12 +32,15 @@ int				main(int ac, char **av) {
 	bool				running(true);
 	Dot					dot;
 	std::map<int, bool>	keys;
+	int					image_w;
+	int					image_h;
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		ft_ExitWithError("Error Initialisation SDL", SDL_GetError());
 	SDL_GetCurrentDisplayMode(0, &DM);
 	display = new Display(DM.w, DM.h, DOT_PATH);
-	dot = Dot((DM.w - DOT_SIZE) / 2, (DM.h - DOT_SIZE) / 2, DOT_SIZE);
+	SDL_QueryTexture(display->image_type->image_list->image, NULL, NULL, &image_w, &image_h);
+	dot = Dot((DM.w - image_w) / 2, (DM.h - image_h) / 2, image_w, image_h);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
@@ -41,8 +50,8 @@ int				main(int ac, char **av) {
 			if (event.type == SDL_KEYUP)
 				keys[event.key.keysym.sym] = false;
 		}
-		keyboardEvent(keys, &running, &dot);
-		display->print(dot.pos);
+		keyboardEvent(keys, &running, &dot, display);
+		display->print(&dot.pos);
 		SDL_Delay(10);
 	}
 	delete display;
