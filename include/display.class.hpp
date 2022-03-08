@@ -2,29 +2,23 @@
 # define DISPLAY_CLASS_HPP
 
 #include <dot.hpp>
+#include <deque>
 
-typedef struct			s_image {
-	SDL_Texture			*image;
-	char				*file_name;
-	struct s_image		*prev;
-	struct s_image		*next;
-}						t_image;
-
-class					Display {
+class								Display {
 	public:
-		SDL_Window		*window;
-		SDL_Renderer	*renderer;
-		t_image			**image_type;
-		int				image_type_selected;
+		SDL_Window					*window;
+		SDL_Renderer				*renderer;
+		std::deque<SDL_Texture*>	*image;
+		int							image_type;
 
 		Display(void);
 		Display(const int width, const int height, const char *image_path);
 		~Display(void);
 
-		void			print(SDL_Rect *pos);
-		void			next_image(void);
-		void			prev_image(void);
-		void			switch_image_type(void);
+		void						print(SDL_Rect *pos);
+		void						next_image(void);
+		void						prev_image(void);
+		void						switch_image_type(void);
 };
 
 #endif

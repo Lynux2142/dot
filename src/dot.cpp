@@ -1,6 +1,6 @@
 #include <dot.hpp>
 
-void			keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
+void	keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
 	if (keys[QUIT])
 		*running = false;
 	if (keys[MOVE_UP])
@@ -31,7 +31,7 @@ void			keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display 
 	}
 }
 
-int				main(int ac, char **av) {
+int		main(int ac, char **av) {
 	Display				*display;
 	SDL_DisplayMode		DM;
 	SDL_Event			event;
@@ -45,7 +45,7 @@ int				main(int ac, char **av) {
 		ft_ExitWithError("Error Initialisation SDL", SDL_GetError());
 	SDL_GetCurrentDisplayMode(0, &DM);
 	display = new Display(DM.w, DM.h, DOT_PATH);
-	SDL_QueryTexture(display->image_type[display->image_type_selected]->image, NULL, NULL, &image_w, &image_h);
+	SDL_QueryTexture(display->image[display->image_type].front(), NULL, NULL, &image_w, &image_h);
 	dot = Dot((DM.w - image_w) / 2, (DM.h - image_h) / 2, image_w, image_h);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
@@ -57,7 +57,7 @@ int				main(int ac, char **av) {
 				keys[event.key.keysym.sym] = false;
 		}
 		keyboardEvent(keys, &running, &dot, display);
-		display->print((display->image_type_selected == 1) ? NULL : &dot.pos);
+		display->print((display->image_type == 1) ? NULL : &dot.pos);
 		SDL_Delay(10);
 	}
 	delete display;

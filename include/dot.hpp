@@ -8,6 +8,7 @@
 # include <display.class.hpp>
 # include <map>
 # include <math.h>
+# include <deque>
 # include <filesystem>
 # include <unistd.h>
 
