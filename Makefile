@@ -23,7 +23,7 @@ CC = g++
 .PHONY: all fclean re
 
 all:
-	${CC} ${SRCS} ${INCLUDE} ${LIB} ${LINK} -o ${NAME} -std=c++17
+	${CC} -g ${SRCS} ${INCLUDE} ${LIB} ${LINK} -o ${NAME} -std=c++17
 
 fclean:
 	${RM} ${NAME}
