@@ -43,23 +43,18 @@ Display::Display(const int width, const int height, const char *image_path) {
 		ft_ExitWithError("Error Renderer Creation", SDL_GetError());
 	boards = fetch_images(this->renderer, BOARD_PATH);
 	dots = fetch_images(this->renderer, DOT_PATH);
-	this->image_type = (t_image_type*)malloc(sizeof(t_image_type));
-	this->image_type->image_list = dots;
-	this->image_type->next = (t_image_type*)malloc(sizeof(t_image_type));
-	this->image_type->next->image_list = boards;
-	this->image_type->next->next = this->image_type;
+	this->image_type = (t_image**)malloc(sizeof(t_image*) * 2);
+	this->image_type[0] = dots;
+	this->image_type[1] = boards;
 }
 
 Display::~Display(void) {
-	t_image_type	*current_image_type = this->image_type;
-	t_image_type	*tmp_image_type;
+	t_image			**current_image_type = this->image_type;
 	t_image			*current_image;
 	t_image			*tmp_image;
 
-	while (current_image_type) {
-		tmp_image_type = current_image_type;
-		current_image_type = current_image_type->next;
-		current_image = tmp_image_type->image_list;
+	for (int i = 0; i < 2; ++i) {
+		current_image = current_image_type[i];
 		while (current_image) {
 			tmp_image = current_image;
 			current_image = current_image->next;
@@ -69,9 +64,7 @@ Display::~Display(void) {
 			tmp_image->prev = NULL;
 			free(tmp_image);
 		}
-		free(tmp_image_type->image_list);
-		tmp_image_type->next = NULL;
-		free(tmp_image_type);
+		free(current_image_type[i]);
 	}
 	if (this->renderer)
 		SDL_DestroyRenderer(this->renderer);
@@ -82,18 +75,18 @@ Display::~Display(void) {
 void		Display::print(SDL_Rect *pos) {
 	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
 	SDL_RenderClear(this->renderer);
-	SDL_RenderCopy(this->renderer, this->image_type->image_list->image, NULL, pos);
+	SDL_RenderCopy(this->renderer, this->image_type[this->image_type_selected]->image, NULL, pos);
 	SDL_RenderPresent(this->renderer);
 }
 
 void		Display::next_image(void) {
-	this->image_type->image_list = this->image_type->image_list->next;
+	this->image_type[this->image_type_selected] = this->image_type[this->image_type_selected]->next;
 }
 
 void		Display::prev_image(void) {
-	this->image_type->image_list = this->image_type->image_list->prev;
+	this->image_type[this->image_type_selected] = this->image_type[this->image_type_selected]->prev;
 }
 
 void		Display::switch_image_type(void) {
-	this->image_type = this->image_type->next;
+	this->image_type_selected = !this->image_type_selected;
 }

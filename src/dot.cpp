@@ -51,7 +51,7 @@ int				main(int ac, char **av) {
 		ft_ExitWithError("Error Initialisation SDL", SDL_GetError());
 	SDL_GetCurrentDisplayMode(0, &DM);
 	display = new Display(DM.w, DM.h, DOT_PATH);
-	SDL_QueryTexture(display->image_type->image_list->image, NULL, NULL, &image_w, &image_h);
+	SDL_QueryTexture(display->image_type[display->image_type_selected]->image, NULL, NULL, &image_w, &image_h);
 	dot = Dot((DM.w - image_w) / 2, (DM.h - image_h) / 2, image_w, image_h);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
@@ -60,7 +60,7 @@ int				main(int ac, char **av) {
 			if (event.type == SDL_KEYDOWN)
 				keyboardEvent(event.key.keysym.sym, &running, &dot, display);
 		}
-		display->print(&dot.pos);
+		display->print((display->image_type_selected == 1) ? NULL : &dot.pos);
 		SDL_Delay(10);
 	}
 	delete display;

@@ -10,16 +10,12 @@ typedef struct			s_image {
 	struct s_image		*next;
 }						t_image;
 
-typedef struct			s_image_type {
-	t_image				*image_list;
-	struct s_image_type	*next;
-}						t_image_type;
-
 class					Display {
 	public:
 		SDL_Window		*window;
 		SDL_Renderer	*renderer;
-		t_image_type	*image_type;
+		t_image			**image_type;
+		int				image_type_selected;
 
 		Display(void);
 		Display(const int width, const int height, const char *image_path);
