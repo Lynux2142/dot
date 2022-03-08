@@ -1,28 +1,41 @@
 #include <dot.hpp>
 
-void			keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
-	if (keys[QUIT])
-		*running = false;
-	if (keys[MOVE_UP])
-		dot->up();
-	if (keys[MOVE_DOWN])
-		dot->down();
-	if (keys[MOVE_LEFT])
-		dot->left();
-	if (keys[MOVE_RIGHT])
-		dot->right();
-	if (keys[DOWN_SCALE])
-		dot->downscale();
-	if (keys[UP_SCALE])
-		dot->upscale();
-	if (keys[RESET])
-		dot->reset();
-	if (keys[NEXT_IMAGE])
-		display->next_image();
-	if (keys[PREV_IMAGE])
-		display->prev_image();
-	if (keys[SWITCH_IMAGE_TYPE])
-		display->switch_image_type();
+void			keyboardEvent(int key, bool *running, Dot *dot, Display *display) {
+	switch (key) {
+		case QUIT :
+			*running = false;
+			break;
+		case MOVE_UP :
+			dot->up();
+			break;
+		case MOVE_DOWN :
+			dot->down();
+			break;
+		case MOVE_LEFT :
+			dot->left();
+			break;
+		case MOVE_RIGHT :
+			dot->right();
+			break;
+		case DOWN_SCALE :
+			dot->downscale();
+			break;
+		case UP_SCALE :
+			dot->upscale();
+			break;
+		case RESET :
+			dot->reset();
+			break;
+		case NEXT_IMAGE :
+			display->next_image();
+			break;
+		case PREV_IMAGE :
+			display->prev_image();
+			break;
+		case SWITCH_IMAGE_TYPE :
+			display->switch_image_type();
+			break;
+	}
 }
 
 int				main(int ac, char **av) {
@@ -31,7 +44,6 @@ int				main(int ac, char **av) {
 	SDL_Event			event;
 	bool				running(true);
 	Dot					dot;
-	std::map<int, bool>	keys;
 	int					image_w;
 	int					image_h;
 
@@ -46,11 +58,8 @@ int				main(int ac, char **av) {
 			if (event.type == SDL_QUIT)
 				running = false;
 			if (event.type == SDL_KEYDOWN)
-				keys[event.key.keysym.sym] = true;
-			if (event.type == SDL_KEYUP)
-				keys[event.key.keysym.sym] = false;
+				keyboardEvent(event.key.keysym.sym, &running, &dot, display);
 		}
-		keyboardEvent(keys, &running, &dot, display);
 		display->print(&dot.pos);
 		SDL_Delay(10);
 	}
