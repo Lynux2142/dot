@@ -64,5 +64,5 @@ void						Display::prev_image(void) {
 }
 
 void						Display::switch_image_type(void) {
-	this->image_type = !this->image_type;
+	this->image_type = (this->image_type == BOARDS) ? DOTS : BOARDS;
 }

@@ -57,7 +57,7 @@ int		main(int ac, char **av) {
 				keys[event.key.keysym.sym] = false;
 		}
 		keyboardEvent(keys, &running, &dot, display);
-		display->print((display->image_type == 1) ? NULL : &dot.pos);
+		display->print((display->image_type == BOARDS) ? NULL : &dot.pos);
 		SDL_Delay(10);
 	}
 	delete display;

@@ -8,7 +8,6 @@
 # include <display.class.hpp>
 # include <map>
 # include <math.h>
-# include <deque>
 # include <filesystem>
 # include <unistd.h>
 
@@ -28,6 +27,8 @@
 # define NEXT_IMAGE				SDLK_o
 # define PREV_IMAGE				SDLK_u
 # define SWITCH_IMAGE_TYPE		SDLK_i
+# define DOTS					0
+# define BOARDS					1
 
 void	ft_ExitWithError(const char *message, const char *error);
 
