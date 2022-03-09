@@ -4,6 +4,7 @@ Display::Display(void) {
 	this->window = NULL;
 	this->renderer = NULL;
 	this->image = NULL;
+	this->image_type = 0;
 }
 
 std::deque<SDL_Texture*>	fetch_images(SDL_Renderer *renderer, const char *dir_path) {
@@ -30,6 +31,7 @@ Display::Display(const int width, const int height, const char *image_path) {
 	this->image = new std::deque<SDL_Texture*>[2];
 	this->image[0] = fetch_images(this->renderer, DOT_PATH);
 	this->image[1] = fetch_images(this->renderer, BOARD_PATH);
+	this->image_type = DOTS;
 }
 
 Display::~Display(void) {
