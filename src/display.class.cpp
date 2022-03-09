@@ -39,7 +39,6 @@ Display::~Display(void) {
 			this->image[this->image_type].pop_front();
 		}
 	}
-	delete this->image;
 	if (this->renderer)
 		SDL_DestroyRenderer(this->renderer);
 	if (this->window)
