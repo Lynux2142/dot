@@ -27,7 +27,7 @@ void	Dot::right(void) {
 void	Dot::upscale(void) {
 	const double center_x = (double)this->pos.x + (double)this->pos.w / 2.0;
 	const double center_y = (double)this->pos.y + (double)this->pos.h / 2.0;
-	this->pos.w += DOT_RESIZE_SPEED;
+	this->pos.w += (int)(round(DOT_RESIZE_SPEED * 0.5) * 2.0);
 	this->pos.h = (int)(round((double)this->pos.w * _ratio * 0.5) * 2.0);
 	this->pos.x = (int)round(center_x - (double)this->pos.w / 2.0);
 	this->pos.y = (int)round(center_y - (double)this->pos.h / 2.0);
@@ -38,7 +38,7 @@ void	Dot::downscale(void) {
 		return;
 	const double center_x = (double)this->pos.x + (double)this->pos.w / 2.0;
 	const double center_y = (double)this->pos.y + (double)this->pos.h / 2.0;
-	this->pos.w -= DOT_RESIZE_SPEED;
+	this->pos.w -= (int)(round(DOT_RESIZE_SPEED * 0.5) * 2.0);
 	this->pos.h = (int)(round((double)this->pos.w * _ratio * 0.5) * 2.0);
 	this->pos.x = (int)round(center_x - (double)this->pos.w / 2.0);
 	this->pos.y = (int)round(center_y - (double)this->pos.h / 2.0);
