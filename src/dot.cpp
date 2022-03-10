@@ -46,7 +46,8 @@ int		main(int ac, char **av) {
 	SDL_GetCurrentDisplayMode(0, &DM);
 	display = new Display(DM.w, DM.h, DOT_PATH);
 	SDL_QueryTexture(display->image[display->image_type].front(), NULL, NULL, &image_w, &image_h);
-	dot = Dot((DM.w - image_w) / 2, (DM.h - image_h) / 2, image_w, image_h);
+//	dot = Dot((DM.w - image_w) / 2, (DM.h - image_h) / 2, image_w, image_h);
+	dot = Dot((DM.w - DOT_INIT_SIZE) / 2, (DM.h - DOT_INIT_SIZE) / 2, DOT_INIT_SIZE, DOT_INIT_SIZE);
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)

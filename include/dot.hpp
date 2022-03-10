@@ -15,6 +15,7 @@
 # define BOARD_PATH				"./images/boards"
 # define DOT_SPEED				2
 # define DOT_RESIZE_SPEED		4 // MUST BE EVEN
+# define DOT_INIT_SIZE			50
 
 # define QUIT					SDLK_ESCAPE
 # define MOVE_UP				SDLK_UP
