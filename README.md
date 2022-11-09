@@ -25,7 +25,7 @@ Then go in the project directory, run install.bat and compile the project with m
 - 'Space' to reset
 - 'Escape' to quit the program
 
-## To start dot on Raspberry start up
+## How to start dot on Raspberry start up
 Create a file 'dot.desktop' in /etc/xdg/autostart/ as root
 
 And copy the code below inside the file
