@@ -24,3 +24,24 @@ Then go in the project directory, run install.bat and compile the project with m
 - 'I' to change between dot mode or board mode
 - 'Space' to reset
 - 'Escape' to quit the program
+
+## To start dot on Raspberry start up
+Create a file 'dot.desktop' in /etc/xdg/autostart/ as root
+
+And copy the code below inside the file
+```
+[Desktop Entry]
+Type=Application
+Name=dot
+NoDisplay=false
+Exec=/bin/rundot
+StartupNotify=true
+```
+Then you have to create a bash script 'rundot' in /bin/ directory that run the program from your project folder (make sure 'rundot' is executable with sudo chmod +x rundot)
+
+rundot example:
+```
+#!/bin/bash
+cd /home/pi/Documents/dot/
+./dot
+```
