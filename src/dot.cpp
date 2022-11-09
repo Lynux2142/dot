@@ -19,15 +19,15 @@ void	keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *d
 		dot->reset();
 	if (keys[NEXT_IMAGE]) {
 		display->next_image();
-			SDL_WaitEvent(NULL);
+		SDL_WaitEvent(NULL);
 	}
 	if (keys[PREV_IMAGE]) {
 		display->prev_image();
-			SDL_WaitEvent(NULL);
+		SDL_WaitEvent(NULL);
 	}
 	if (keys[SWITCH_IMAGE_TYPE]) {
 		display->switch_image_type();
-			SDL_WaitEvent(NULL);
+		SDL_WaitEvent(NULL);
 	}
 }
 
