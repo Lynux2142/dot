@@ -9,7 +9,7 @@ Dot::Dot(int x, int y, int w, int h): _init_pos({x, y, w, h}), _ratio((double)h 
 }
 
 void	Dot::up(void) {
-		this->pos.y -= DOT_SPEED;
+	this->pos.y -= DOT_SPEED;
 }
 
 void	Dot::down(void) {
