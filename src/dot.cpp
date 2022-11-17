@@ -1,6 +1,6 @@
 #include <dot.hpp>
 
-void	keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
+void	fastKeyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *display) {
 	if (keys[QUIT])
 		*running = false;
 	if (keys[MOVE_UP])
@@ -17,18 +17,15 @@ void	keyboardEvent(std::map<int, bool> keys, bool *running, Dot *dot, Display *d
 		dot->upscale();
 	if (keys[RESET])
 		dot->reset();
-	if (keys[NEXT_IMAGE]) {
+}
+
+void	slowKeyboardEvent(int keyValue, Display *display) {
+	if (keyValue == NEXT_IMAGE)
 		display->next_image();
-		SDL_WaitEvent(NULL);
-	}
-	if (keys[PREV_IMAGE]) {
+	if (keyValue == PREV_IMAGE)
 		display->prev_image();
-		SDL_WaitEvent(NULL);
-	}
-	if (keys[SWITCH_IMAGE_TYPE]) {
+	if (keyValue == SWITCH_IMAGE_TYPE)
 		display->switch_image_type();
-		SDL_WaitEvent(NULL);
-	}
 }
 
 int		main(int ac, char **av) {
@@ -52,12 +49,14 @@ int		main(int ac, char **av) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
 				running = false;
-			if (event.type == SDL_KEYDOWN)
+			if (event.type == SDL_KEYDOWN) {
 				keys[event.key.keysym.sym] = true;
+				slowKeyboardEvent(event.key.keysym.sym, display);
+			}
 			if (event.type == SDL_KEYUP)
 				keys[event.key.keysym.sym] = false;
 		}
-		keyboardEvent(keys, &running, &dot, display);
+		fastKeyboardEvent(keys, &running, &dot, display);
 		display->print((display->image_type == BOARDS) ? NULL : &dot.pos);
 		SDL_Delay(10);
 	}
